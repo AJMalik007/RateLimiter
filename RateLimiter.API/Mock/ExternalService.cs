@@ -3,12 +3,6 @@ using RateLimiter.API.Model;
 
 namespace RateLimiter.API.Mock;
 
-
-public interface IExternalService
-{
-    Task<List<User>> GetDataAsync();
-}
-
 public class ExternalService : IExternalService
 {
     public async Task<List<User>> GetDataAsync()
@@ -22,6 +16,6 @@ public class ExternalService : IExternalService
 
         var users = userFaker.Generate(10);
 
-        return users;
+        return await Task.FromResult(users);
     }
 }
