@@ -1,5 +1,6 @@
 using RateLimiter.API.Middleware;
 using RateLimiter.API.Mock;
+using RateLimiter.API.Services;
 using RateLimiter.API.Services.RateLimit;
 using RateLimiter.API.Services.Redis;
 using StackExchange.Redis;
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IExternalService, ExternalService>();
 builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
 builder.Services.AddScoped<IRateLimitingService, RateLimitingService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddControllers();
 

@@ -16,6 +16,9 @@ public class ExternalService : IExternalService
 
         var users = userFaker.Generate(10);
 
+        //Added delay to simulate the API call
+        await Task.Delay(5000);
+
         return await Task.FromResult(users);
     }
 }
