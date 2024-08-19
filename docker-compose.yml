@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  redis:
+    image: "redis:alpine"
+    container_name: "redis"
+    ports:
+      - "6379:6379"
+
+  ratelimiter.api:
+    build: 
+      context: .
+      dockerfile: RateLimiter.API/Dockerfile
+    container_name: "ratelimiter_api"
+    ports:
+      - "5000:8080"
+      - "5001:8081"
+    depends_on:
+      - redis
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - RedisConnection=redis:6379
+      - GlobalRequestLimit=3  
+      - UserRequestLimit=1   
+      - RateLimitExpiryTime=120   
+      - GlobalClient=global  
+      - CacheExpiryTime=120 
