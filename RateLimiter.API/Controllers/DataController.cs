@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using RateLimiter.API.Mock;
 
 namespace RateLimiter.API.Controllers;
 [ApiController]
@@ -6,15 +7,21 @@ namespace RateLimiter.API.Controllers;
 public class DataController : ControllerBase
 {
     private readonly ILogger<DataController> _logger;
+    private readonly IExternalService _service;
 
-    public DataController(ILogger<DataController> logger)
+    public DataController(
+        ILogger<DataController> logger,
+        IExternalService service)
     {
         _logger = logger;
+        _service = service;
     }
 
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        return Ok("OK");
+
+
+        return Ok(await _service.GetDataAsync());
     }
 }
