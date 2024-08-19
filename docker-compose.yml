@@ -20,8 +20,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - RedisConnection=redis:6379
-      - GlobalRequestLimit=3  
-      - UserRequestLimit=1   
-      - RateLimitExpiryTime=120   
+      - GlobalRequestLimit=100  
+      - UserRequestLimit=10   
+      - RateLimitExpiryTime=60   
       - GlobalClient=global  
-      - CacheExpiryTime=120 
+      - CacheExpiryTime=30 

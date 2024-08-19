@@ -2,5 +2,5 @@
 
 GET {{RateLimiterAPI_HostAddress}}/api/data
 Accept: application/json
-
+X-API-KEY : 4
 ###
