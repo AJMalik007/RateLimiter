@@ -17,7 +17,7 @@ builder.Services.AddControllers();
 
 // Add Redis configuration
 builder.Services.AddSingleton<IConnectionMultiplexer>(
-    ConnectionMultiplexer.Connect(Environment.GetEnvironmentVariable("RedisConnection"))
+    _ => ConnectionMultiplexer.Connect(Environment.GetEnvironmentVariable("RedisConnection"))
 );
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -32,9 +32,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseMiddleware<RateLimitingMiddleware>();
-app.UseHttpsRedirection();
 
+// Use custom rate limiting middleware
+app.UseMiddleware<RateLimitingMiddleware>();
+
+app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
