@@ -6,13 +6,11 @@ namespace RateLimiter.API.Controllers;
 [Route("api")]
 public class DataController : ControllerBase
 {
-    private readonly ILogger<DataController> _logger;
     private readonly IUserService _userService;
+
     public DataController(
-        ILogger<DataController> logger,
         IUserService userService)
     {
-        _logger = logger;
         _userService = userService;
     }
 

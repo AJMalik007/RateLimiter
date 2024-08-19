@@ -23,7 +23,6 @@ public class UserService : IUserService
     }
     public async Task<List<User>> GetAllAsync()
     {
-
         var cachedData = await _redisCacheService.GetCacheValueAsync(_cacheKey);
 
         if (!string.IsNullOrEmpty(cachedData))

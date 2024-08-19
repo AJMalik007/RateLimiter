@@ -9,7 +9,7 @@ public class RateLimitingMiddleware
     private readonly int _userRequestLimit;
     private readonly int _globalRequestLimit;
     private readonly TimeSpan _rateLimitExpiryTime;
-    private readonly string _globalClient;
+    private readonly string? _globalClient;
 
     public RateLimitingMiddleware(
         RequestDelegate next,
@@ -17,10 +17,10 @@ public class RateLimitingMiddleware
     {
         _next = next;
         _serviceScopeFactory = serviceScopeFactory;
+        _globalClient = Environment.GetEnvironmentVariable("GlobalClient");
         _userRequestLimit = Convert.ToInt32(Environment.GetEnvironmentVariable("UserRequestLimit"));
         _globalRequestLimit = Convert.ToInt32(Environment.GetEnvironmentVariable("GlobalRequestLimit"));
         _rateLimitExpiryTime = TimeSpan.FromSeconds(Convert.ToInt32(Environment.GetEnvironmentVariable("RateLimitExpiryTime")));
-        _globalClient = Environment.GetEnvironmentVariable("GlobalClient");
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -30,7 +30,7 @@ public class RateLimitingMiddleware
         if (string.IsNullOrEmpty(clientId))
         {
             context.Response.StatusCode = 400; // Bad Request
-            await context.Response.WriteAsync("X-API-KEY header missing.");
+            await context.Response.WriteAsJsonAsync(new { error = "X-API-KEY header missing." });
             return;
         }
 
