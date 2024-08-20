@@ -22,6 +22,6 @@ services:
       - RedisConnection=redis:6379
       - GlobalRequestLimit=100  
       - UserRequestLimit=10   
-      - RateLimitExpiryTime=60   
+      - RateLimitExpiryTime=60   #seconds
       - GlobalClient=global  
-      - CacheExpiryTime=30 
+      - CacheExpiryTime=30 #seconds
