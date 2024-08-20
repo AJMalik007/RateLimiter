@@ -47,7 +47,7 @@ This microservice is designed to handle rate-limiting for API requests and imple
 
 ## API Endpoints
 
-**/api/data**
+### **`/api/data`**
 
 This endpoint simulates fetching real-time data (e.g., network connectivity status) from a mock external API. (5 seconds delay)
 
@@ -134,6 +134,29 @@ This endpoint simulates fetching real-time data (e.g., network connectivity stat
 ]
 ```
 
+## Webhook for Cache Invalidation
+
+A new endpoint has been added to invalidate the cache and refresh it with updated data. This ensures that the cache remains up-to-date without causing delays for the users.
+
+### `/api/webhook/invalidate`
+
+- **Method**: POST
+- **Description**: Invalidates the existing cache by fetching fresh data from the external service and updating the cache with this new data.
+
+> [!IMPORTANT]  
+> This approach avoids deleting the cache outright, which could cause delays if the external service takes time to fetch data. Instead, it proactively updates the cache, maintaining performance and ensuring users receive fresh data.
+
+### Example Usage
+
+To invalidate the cache, send a POST request to `http://localhost:5001/api/webhook/invalidate`.
+
+```conolse
+curl --location --request POST 'https://localhost:5001/api/Webhook/invalidate' \
+--header 'X-API-KEY: c918c339-d768-4a9a-8f54-13b47f00373a'
+```
+
+- **Response**: `204 No Content` on successful cache invalidation.
+
 ## Rate-Limiting Implementation
 
 The service implements both global and client-specific rate-limiting:
@@ -176,6 +199,15 @@ To modify these values, update the environment variables in **docker-compose.yml
 
 - **Redis Storage:** Both rate-limiting data and cache entries are stored in Redis, making the service ready for horizontal scaling.
 - **Containerization:** The use of Docker ensures that the service can be easily deployed and scaled.
+
+## How to Run Tests
+
+This project includes unit tests to verify the rate-limiting and caching logic.
+
+- Run the tests:
+  ```console
+  dotnet test
+  ```
 
 # Documentation
 
