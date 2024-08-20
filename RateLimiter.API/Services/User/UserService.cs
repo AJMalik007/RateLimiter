@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using RateLimiter.API.Common;
 using RateLimiter.API.Mock;
 using RateLimiter.API.Model;
 using RateLimiter.API.Services.Redis;
@@ -13,7 +14,6 @@ public class UserService : IUserService
     private readonly IRedisCacheService _redisCacheService;
     private readonly IExternalService _externalService;
     private readonly int _cacheExpiryTime;
-    private readonly string _cacheKey;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UserService"/> class.
@@ -27,7 +27,6 @@ public class UserService : IUserService
         _externalService = externalService;
         _redisCacheService = redisCacheService;
         _cacheExpiryTime = Convert.ToInt32(Environment.GetEnvironmentVariable("CacheExpiryTime"));
-        _cacheKey = "externalApiData";
     }
 
     /// <summary>
@@ -37,7 +36,7 @@ public class UserService : IUserService
     public async Task<List<User>> GetAllAsync()
     {
         // Try to get data from cache
-        var cachedData = await _redisCacheService.GetCacheValueAsync(_cacheKey);
+        var cachedData = await _redisCacheService.GetCacheValueAsync(AppConstants.RedisCacheKey);
 
         // If cached data is available, deserialize and return it
         if (!string.IsNullOrEmpty(cachedData))
@@ -50,7 +49,7 @@ public class UserService : IUserService
 
         // Cache the fetched data
         await _redisCacheService.SetCacheValueAsync(
-            _cacheKey,
+            AppConstants.RedisCacheKey,
             JsonConvert.SerializeObject(data),
             TimeSpan.FromSeconds(_cacheExpiryTime));
 
